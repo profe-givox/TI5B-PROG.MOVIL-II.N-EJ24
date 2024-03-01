@@ -26,7 +26,9 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.marsphotos.MarsPhotosApplication
 import com.example.marsphotos.data.MarsPhotosRepository
+import com.example.marsphotos.data.SNRepository
 import com.example.marsphotos.model.MarsPhoto
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -34,42 +36,42 @@ import java.io.IOException
 /**
  * UI state for the Home screen
  */
-sealed interface MarsUiState {
-    data class Success(val photos: List< MarsPhoto>) : MarsUiState
-    object Error : MarsUiState
-    object Loading : MarsUiState
+sealed interface SNUiState {
+    data class Success(val accesoLogin: String) : SNUiState
+    object Error : SNUiState
+    object Loading : SNUiState
 }
 
-class MarsViewModel(private val marsPhotosRepository: MarsPhotosRepository) : ViewModel() {
+class SNViewModel(private val snRepository: SNRepository) : ViewModel() {
     /** The mutable State that stores the status of the most recent request */
-    var marsUiState: MarsUiState by mutableStateOf(MarsUiState.Loading)
+    var snUiState: SNUiState by mutableStateOf(SNUiState.Loading)
         private set
 
     /**
      * Call getMarsPhotos() on init so we can display status immediately.
      */
     init {
-        //getMarsPhotos()
+        accesoSN()
     }
 
     /**
      * Gets Mars photos information from the Mars API Retrofit service and updates the
      * [MarsPhoto] [List] [MutableList].
      */
-    fun getMarsPhotos() {
-        viewModelScope.launch {
-            marsUiState = MarsUiState.Loading
-            marsUiState = try {
-                val listResult = marsPhotosRepository.getMarsPhotos()
-                MarsUiState.Success(
+    fun accesoSN() {
+        viewModelScope.launch(Dispatchers.IO) {
+            //snUiState = SNUiState.Loading
+            snUiState = try {
+                val listResult = snRepository.acceso("s20120999", "mipass")
+                SNUiState.Success(
                     //"Success: ${listResult.size} Mars photos retrieved"
                     //"First Mars image URL: ${listResult[0].imgSrc}"
                     listResult
                 )
             } catch (e: IOException) {
-                MarsUiState.Error
+                SNUiState.Error
             } catch (e: HttpException) {
-                MarsUiState.Error
+                SNUiState.Error
             }
         }
     }
@@ -81,8 +83,8 @@ class MarsViewModel(private val marsPhotosRepository: MarsPhotosRepository) : Vi
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[APPLICATION_KEY] as MarsPhotosApplication)
-                val marsPhotosRepository = application.container.marsPhotosRepository
-                MarsViewModel(marsPhotosRepository = marsPhotosRepository)
+                val snRepository = application.container.snRepository
+                SNViewModel(snRepository = snRepository)
             }
         }
     }

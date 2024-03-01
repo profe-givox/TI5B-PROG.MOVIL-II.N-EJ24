@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.marsphotos.R
 import com.example.marsphotos.ui.screens.HomeScreen
 import com.example.marsphotos.ui.screens.MarsViewModel
+import com.example.marsphotos.ui.screens.SNViewModel
 
 @Composable
 fun MarsPhotosApp() {
@@ -48,6 +49,10 @@ fun MarsPhotosApp() {
         ) {
             val marsViewModel: MarsViewModel =
                 viewModel(factory = MarsViewModel.Factory)
+
+            val snViewModel: SNViewModel =
+                viewModel(factory = SNViewModel.Factory)
+
             HomeScreen(
                 marsUiState = marsViewModel.marsUiState,
                 retryAction = marsViewModel::getMarsPhotos ,
