@@ -16,6 +16,8 @@
 package com.example.marsphotos.data
 
 import android.util.Log
+import com.example.marsphotos.model.ProfileStudent
+import com.example.marsphotos.model.Usuario
 import com.example.marsphotos.network.SICENETWService
 import com.example.marsphotos.network.bodyacceso
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -33,14 +35,34 @@ import javax.net.ssl.HttpsURLConnection
 interface SNRepository {
     /** Fetches list of MarsPhoto from marsApi */
     suspend fun acceso(m: String, p: String): String
+    suspend fun accesoObjeto(m: String, p: String): Usuario
+    suspend fun profile(m: String, p: String): ProfileStudent
+
+
 }
 
 
-class DBLocalSNRepository():SNRepository {
+class DBLocalSNRepository(val apiDB : Any):SNRepository {
     override suspend fun acceso(m: String, p: String): String {
         //TODO("Not yet implemented")
         //Reviso en base de datos
+        //Preparar Room
+
+        //apiDB.acceso( Usuario(matricula = m) )
+
         return ""
+
+    }
+
+    override suspend fun accesoObjeto(m: String, p: String): Usuario {
+
+        //Tengo  que ir a Room
+        return Usuario(matricula = "")
+    }
+
+    override suspend fun profile(m: String, p: String): ProfileStudent {
+        //TODO("Not yet implemented")
+        return ProfileStudent("S")
     }
 }
 
@@ -63,6 +85,18 @@ class NetworSNRepository(
         /*Log.d("RXML", res.message() )
         return res.message()*/
         return ""
+    }
+
+    override suspend fun accesoObjeto(m: String, p: String): Usuario {
+        //TODO("Not yet implemented")
+        return Usuario(matricula = "")
+
+
+    }
+
+    override suspend fun profile(m: String, p: String): ProfileStudent {
+        TODO("Not yet implemented")
+
     }
 
     suspend fun callHTTPS(){

@@ -62,7 +62,7 @@ class SNViewModel(private val snRepository: SNRepository) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             //snUiState = SNUiState.Loading
             snUiState = try {
-                val listResult = snRepository.acceso("s20120999", "mipass")
+                val listResult = snRepository.acceso("S19120153", "Lt7=8Q${"$"}c")
                 SNUiState.Success(
                     //"Success: ${listResult.size} Mars photos retrieved"
                     //"First Mars image URL: ${listResult[0].imgSrc}"

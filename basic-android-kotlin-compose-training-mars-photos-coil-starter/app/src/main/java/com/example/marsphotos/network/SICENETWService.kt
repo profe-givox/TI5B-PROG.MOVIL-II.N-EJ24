@@ -45,6 +45,6 @@ interface SICENETWService {
     @POST("/ws/wsalumnos.asmx")
     suspend fun acceso(@Body soap: RequestBody): ResponseBody
 
-    @GET()
+    @GET("/")
     suspend fun con (): ResponseBody
 }
