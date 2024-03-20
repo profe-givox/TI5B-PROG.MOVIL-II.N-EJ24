@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.platform.location.locationupdates.LocationUpdatesScreen
 import com.example.platform.location.permission.LocationPermissionScreen
 import net.ivanvega.milocalizacionymapasb.ui.location.CurrentLocationScreen
 import net.ivanvega.milocalizacionymapasb.ui.theme.MiLocalizacionYMapasBTheme
@@ -27,7 +28,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         //LocationPermissionScreen()
-                        CurrentLocationScreen()
+                        //CurrentLocationScreen()
+                        LocationUpdatesScreen()
                     }
                 }
             }
