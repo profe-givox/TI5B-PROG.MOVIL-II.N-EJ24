@@ -13,6 +13,8 @@ playServicesLocation = "21.2.0"
 kotlinxCoroutinesPlayServices = "1.8.1-Beta"
 playServicesMaps = "18.2.0"
 mapsCompose = "4.3.3"
+osmdroidAndroid = "6.1.18"
+osmAndrodCompose = "0.0.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +37,8 @@ kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "ko
 kotlinx-play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "kotlinxCoroutinesPlayServices" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "mapsCompose" }
+osmdroid-android = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmdroidAndroid" }
+osm-androd-compose = { group = "tech.utsmankece", name = "osm-androd-compose", version.ref = "osmAndrodCompose" }
 
 
 [plugins]

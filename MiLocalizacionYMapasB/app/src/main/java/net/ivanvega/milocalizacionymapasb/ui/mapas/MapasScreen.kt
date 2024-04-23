@@ -20,6 +20,12 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.utsman.osmandcompose.OpenStreetMap
+import com.utsman.osmandcompose.Marker as MarkerOSMDC
+import com.utsman.osmandcompose.Polyline as PolylineOSMDC
+import com.utsman.osmandcompose.rememberCameraState
+import com.utsman.osmandcompose.rememberMarkerState
+import org.osmdroid.util.GeoPoint
 
 @Composable
 fun MiPrimerMapa() {
@@ -59,5 +65,38 @@ fun MiPrimerMapa() {
                 uiSettings = uiSettings.copy(zoomControlsEnabled = it)
             }
         )
+    }
+}
+
+@Composable
+fun MiMapaOSMDroidCompose() {
+    // define camera state
+    val cameraState = rememberCameraState {
+        geoPoint = GeoPoint(20.14025, -101.15112)
+        zoom = 18.0 // optional, default is 5.0
+    }
+
+    // define marker state
+    val depokMarkerState = rememberMarkerState(
+        geoPoint = cameraState.geoPoint
+    )
+
+    // define polyline
+    val geoPoint = remember {
+        listOf( GeoPoint(20.14025, -101.15112),  GeoPoint(20.14338, -101.14988),
+            GeoPoint(20.14389, -101.15111))
+    }
+
+    // add node
+    OpenStreetMap(
+        modifier = Modifier.fillMaxSize(),
+        cameraState = cameraState
+    ){
+        // add marker here
+        MarkerOSMDC(
+            state = depokMarkerState  // add marker state
+        )
+        // add polyline
+        PolylineOSMDC(geoPoints = geoPoint)
     }
 }

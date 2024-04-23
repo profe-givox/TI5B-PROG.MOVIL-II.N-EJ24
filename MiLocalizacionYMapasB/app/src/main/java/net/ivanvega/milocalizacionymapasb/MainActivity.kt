@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.platform.location.locationupdates.LocationUpdatesScreen
 import com.example.platform.location.permission.LocationPermissionScreen
 import net.ivanvega.milocalizacionymapasb.ui.location.CurrentLocationScreen
+import net.ivanvega.milocalizacionymapasb.ui.mapas.MiMapaOSMDroidCompose
 import net.ivanvega.milocalizacionymapasb.ui.mapas.MiPrimerMapa
 import net.ivanvega.milocalizacionymapasb.ui.theme.MiLocalizacionYMapasBTheme
 
@@ -31,7 +32,8 @@ class MainActivity : ComponentActivity() {
                         //LocationPermissionScreen()
                         //CurrentLocationScreen()
                         //LocationUpdatesScreen()
-                        MiPrimerMapa()
+                        //MiPrimerMapa() //Mapas de google
+                        MiMapaOSMDroidCompose()
                     }
                 }
             }
