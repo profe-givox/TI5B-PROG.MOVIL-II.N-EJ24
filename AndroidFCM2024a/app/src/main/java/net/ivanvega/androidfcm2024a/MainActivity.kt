@@ -1,7 +1,8 @@
-package net.ivanvega.milocalizacionymapasb
+package net.ivanvega.androidfcm2024a
 
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,30 +12,42 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.platform.location.locationupdates.LocationUpdatesScreen
-import com.example.platform.location.permission.LocationPermissionScreen
-import net.ivanvega.milocalizacionymapasb.ui.location.CurrentLocationScreen
-import net.ivanvega.milocalizacionymapasb.ui.mapas.MiMapaOSMDroidCompose
-import net.ivanvega.milocalizacionymapasb.ui.mapas.MiPrimerMapa
-import net.ivanvega.milocalizacionymapasb.ui.theme.MiLocalizacionYMapasBTheme
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
+import net.ivanvega.androidfcm2024a.ui.theme.AndroidFCM2024aTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val TAG: String? = "FCM xxx"
+
+    override fun onStart() {
+        super.onStart()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(
+            OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = getString(R.string.msg_token_fmt, token)
+            Log.d(TAG, msg)
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MiLocalizacionYMapasBTheme {
+            AndroidFCM2024aTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        //LocationPermissionScreen()
-                        //CurrentLocationScreen()
-                        //LocationUpdatesScreen()
-                        MiPrimerMapa() //Mapas de google
-                        //MiMapaOSMDroidCompose()   //Mapas de Open Street Maps
-                    }
+                    Greeting("Android")
                 }
             }
         }
@@ -52,7 +65,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MiLocalizacionYMapasBTheme {
+    AndroidFCM2024aTheme {
         Greeting("Android")
     }
 }

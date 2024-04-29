@@ -1,15 +1,18 @@
 package net.ivanvega.milocalizacionymapasb.ui.mapas
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -20,15 +23,22 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.utsman.osmandcompose.DefaultMapProperties
 import com.utsman.osmandcompose.OpenStreetMap
+import com.utsman.osmandcompose.ZoomButtonVisibility
 import com.utsman.osmandcompose.Marker as MarkerOSMDC
 import com.utsman.osmandcompose.Polyline as PolylineOSMDC
 import com.utsman.osmandcompose.rememberCameraState
 import com.utsman.osmandcompose.rememberMarkerState
+import com.utsman.osmandcompose.rememberOverlayManagerState
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.CopyrightOverlay
 
 @Composable
 fun MiPrimerMapa() {
+
+
     val singapore = LatLng(20.14025, -101.15112)
 
     val polyline = listOf(   LatLng(20.14025, -101.15112),  LatLng(20.14338, -101.14988),
@@ -40,7 +50,7 @@ fun MiPrimerMapa() {
 
     var uiSettings by remember { mutableStateOf(MapUiSettings()) }
     var properties by remember {
-        mutableStateOf(MapProperties(mapType = MapType.NORMAL))
+        mutableStateOf(MapProperties(mapType = MapType.SATELLITE    ))
     }
 
     Box(Modifier.fillMaxSize()) {
@@ -58,7 +68,6 @@ fun MiPrimerMapa() {
                 snippet = "Marker in Angel de la independencia"
             )
         }
-
         Switch(
             checked = uiSettings.zoomControlsEnabled,
             onCheckedChange = {
@@ -70,6 +79,25 @@ fun MiPrimerMapa() {
 
 @Composable
 fun MiMapaOSMDroidCompose() {
+    val overlayManagerState = rememberOverlayManagerState()
+
+    val context = LocalContext.current
+
+    var mapProperties by remember {
+        mutableStateOf(DefaultMapProperties)
+    }
+
+    // setup mapProperties in side effect
+    SideEffect {
+        mapProperties = mapProperties
+            .copy(isTilesScaledToDpi = true)
+            .copy(tileSources = TileSourceFactory.MAPNIK)
+            .copy(isEnableRotationGesture = true)
+            .copy(isMultiTouchControls = true)
+            .copy(zoomButtonVisibility = ZoomButtonVisibility.ALWAYS)
+    }
+
+
     // define camera state
     val cameraState = rememberCameraState {
         geoPoint = GeoPoint(20.14025, -101.15112)
@@ -90,7 +118,19 @@ fun MiMapaOSMDroidCompose() {
     // add node
     OpenStreetMap(
         modifier = Modifier.fillMaxSize(),
-        cameraState = cameraState
+        cameraState = cameraState,
+        properties = mapProperties,
+        overlayManagerState = overlayManagerState,
+        onFirstLoadListener = {
+            val copyright = CopyrightOverlay(context)
+            overlayManagerState.overlayManager.add(copyright)
+        },
+        onMapLongClick = {
+            Toast.makeText(context,
+                "GeoPoint: (${it.latitude} , ${it.longitude}) ",
+                Toast.LENGTH_LONG).show()
+        }
+
     ){
         // add marker here
         MarkerOSMDC(
